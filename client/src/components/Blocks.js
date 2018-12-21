@@ -20,7 +20,7 @@ class Blocks extends Component {
     }
 
     render() {
-        console.log(this.state);
+        // console.log(this.state);
         return (
             <div>
                 <h2>Blocks</h2>
@@ -49,7 +49,7 @@ class Blocks extends Component {
                     }
                 </div>
                 {
-                    this.state.blocks.slice(0).reverse().map(block => {
+                    this.state.blocks.map(block => {
                         return (
                             <div key={block.hash} className='border border-primary rounded mb-3 p-2'>
                                 <Block key={block.hash} block={block}/>

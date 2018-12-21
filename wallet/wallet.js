@@ -1,15 +1,27 @@
 const Transaction = require('./transaction');
 const { STARTING_BALANCE } = require('../config');
 const { ec, cryptoHash } = require('../util');
+const fs = require('fs');
 
 
 class Wallet {
     constructor() {
+        try {
+            this.privateKey = JSON.parse(fs.readFileSync('./persist/keypair.json', 'utf8'));
+            this.keyPair = ec.keyFromPrivate(this.privateKey, 'hex');
+            this.publicKey = this.keyPair.getPublic().encode('hex');
+        } catch {
+            this.keyPair = ec.genKeyPair();
+            this.publicKey = this.keyPair.getPublic().encode('hex');
+            this.writeKeyPair(JSON.stringify(this.keyPair.getPrivate()));
+        }
         this.balance = STARTING_BALANCE;
+    }
 
-        this.keyPair = ec.genKeyPair();
-
-        this.publicKey = this.keyPair.getPublic().encode('hex');
+    writeKeyPair(keyPair) {
+        fs.writeFile('./persist/keypair.json', keyPair, 'utf8', (err) => {
+            if (err) throw err;
+        });
     }
 
     sign(data) {
@@ -22,6 +34,11 @@ class Wallet {
                 chain,
                 address: this.publicKey
             });
+            console.log('createTransaction', this.balance);
+            console.log('Wallet.calculateBalance', Wallet.calculateBalance({
+                chain,
+                address: this.publicKey
+            }));
         }
         if (amount > this.balance) {
             throw new Error('Amount exceeds balance!')
@@ -49,7 +66,7 @@ class Wallet {
                 const addressOutput = transaction.outputMap[address];
 
                 if (addressOutput) {
-                    outputsTotal += addressOutput;
+                    outputsTotal = outputsTotal + addressOutput;
                 }
             }
 

@@ -19,54 +19,6 @@ const transactionMiner = new TransactionMiner({
 const DEFAULT_PORT = 5418;
 const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
 
-
-
-
-
-
-const walletOne = new Wallet();
-const walletTwo = new Wallet();
-
-const generateWalletTransaction = ({ wallet, recipient, amount }) => {
-    const transaction = wallet.createTransaction({
-        recipient, amount, chain: blockchain.chain
-    });
-
-    transactionPool.setTransaction(transaction);
-};
-
-const walletAction = () => generateWalletTransaction({
-    wallet, recipient: walletOne.publicKey, amount: 5
-});
-
-const walletOneAction = () => generateWalletTransaction({
-    wallet: walletOne, recipient: walletTwo.publicKey, amount: 10
-});
-
-const walletTwoAction = () => generateWalletTransaction({
-    wallet: walletTwo, recipient: wallet.publicKey, amount:15
-});
-
-for (let idx = 0; idx < 15; idx++) {
-    if (idx % 3 === 0) {
-        walletAction();
-        walletOneAction();
-    } else if (idx % 3 === 1) {
-        walletAction();
-        walletTwoAction();
-    } else {
-        walletOneAction();
-        walletTwoAction();
-    }
-
-    transactionMiner.mineTransactions();
-}
-
-
-
-
-
-
 module.exports = {
 
     getBlocks: (req, res) => {
@@ -152,7 +104,7 @@ module.exports = {
             if (!error && res.statusCode === 200) {
                 const rootChain = JSON.parse(body);
     
-                console.log('replace chain on a sync with', rootChain);
+                // console.log('replace chain on a sync with', rootChain);
                 blockchain.replaceChain(rootChain);
             }
         });
@@ -161,7 +113,7 @@ module.exports = {
             if (!error && res.statusCode === 200) {
                 const rootTransactionMap = JSON.parse(body);
     
-                console.log('replace transaction pool map on a sync with', rootTransactionMap);
+                // console.log('replace transaction pool map on a sync with', rootTransactionMap);
                 transactionPool.setMap(rootTransactionMap);
             }
         })

@@ -7,7 +7,7 @@ class Block extends Component {
 
     toggleTransaction = () => {
         const { data } = this.props.block;
-        if (data.map()) {
+        if (data.map) {
             this.setState({ displayTransaction: !this.state.displayTransaction });
         }
     }

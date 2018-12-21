@@ -35,7 +35,7 @@ class Blockchain {
         }
 
         if (onSuccess) onSuccess();
-        console.log('Replacing chain with: ', chain);
+        // console.log('Replacing chain with: ', chain);
         this.chain = chain;
     }
 
@@ -69,10 +69,22 @@ class Blockchain {
                         address: transaction.input.address
                     });
 
-                    if (transaction.input.amount !== trueBalance) {
-                        console.error('Invalid input amount!');
-                        return false;
-                    }
+
+
+                    // I really need to work out the problem with this section!!!!
+
+
+                    // console.log('blockCount', idx); 
+                    // console.log('input.amount', transaction.input.amount);
+                    // console.log('trueBalance', trueBalance);
+                    // if (transaction.input.amount !== trueBalance) {
+                    //     console.error('Invalid input amount!');
+                    //     return false;
+                    // }
+
+
+
+
 
                     if (transactionSet.has(transaction)) {
                         console.error("An identical transaction appears more than once in the block!");
